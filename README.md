@@ -4,7 +4,7 @@ This is a simple template that will deploy and configure a basic enviroment acco
 
 ## Getting started
 
-No tfvars are used. For a full writeup please see "Documentatoin Overview.docx"
+No tfvars are used. For a full writeup please see "Documentation Overview.docx"
 The latest version of Terraform v1.0.11 needs to be used for deployment.
 
 To run this simply run:
