@@ -47,7 +47,7 @@ module "alb" {
   ]
 
   access_logs = {
-    bucket = "french-logging-2022"
+    bucket = "french-lab-logging-2022"
   }
 
   tags = merge(var.default_alb_tags)

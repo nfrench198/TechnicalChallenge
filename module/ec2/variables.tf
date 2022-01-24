@@ -1,6 +1,6 @@
 variable "default_ec2_tags" {
   default = {
-    "Name" : "bastion_host"
+    "Name" : "BastionServer"
     "department" : "cloudenablement",
     "team" : "cloudserver",
     "contact" : "cloudserver@frenchscompany.com"
@@ -10,7 +10,7 @@ variable "default_ec2_tags" {
 
 variable "default_bastion_sg_tags" {
   default = {
-    "Name" : "sg_bastion_host"
+    "Name" : "sg_bastion_server"
     "department" : "cloudenablement",
     "team" : "cloudnetworksecurity",
     "contact" : "cloudnetworksecurity@frenchscompany.com"

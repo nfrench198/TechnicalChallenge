@@ -1,6 +1,6 @@
 variable "default_asg_tags" {
   default = {
-    "Name" : "web-server"
+    "Name" : "WebServer"
     "department" : "cloudenablement",
     "team" : "cloudserver",
     "contact" : "cloudserver@frenchscompany.com"
