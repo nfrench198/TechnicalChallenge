@@ -1,14 +1,14 @@
 # CREATES KMS KEY FOR EBS ENCRYPTION
 
 # CREATES USERDATA FOR WEBSERVER LAUNCH TEMPLATE
-data "template_file" "WebServerUD" {
+data "template_file" "BastoinServer" {
   template = <<EOF
 #!/bin/bash
 yum update
 yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
 systemctl enable amazon-ssm-agent
 systemctl start amazon-ssm-agent
-hostnamectl set-hostname bastionhost
+hostnamectl set-hostname BastionServer
   EOF
 }
 
@@ -28,10 +28,10 @@ data "aws_ami" "rhel" {
   }
 }
 
-#CREATES SECURITY GROUP FOR EXTERNAL FACING BASTION HOST
-resource "aws_security_group" "sg_bastion_host" {
-  name        = "sg_bastion_host"
-  description = "Security Group used for Bastion Host"
+#CREATES SECURITY GROUP FOR EXTERNAL FACING BASTION SERVER
+resource "aws_security_group" "sg_bastionserver" {
+  name        = "sg_bastionserver"
+  description = "Security Group used for Bastion Server"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -54,14 +54,14 @@ resource "aws_security_group" "sg_bastion_host" {
 
 }
 
-# CREATES KEYPAIR TO BE USED ON BASTION HOST
+# CREATES KEYPAIR TO BE USED ON BASTION Server
 resource "aws_key_pair" "bastion-kp" {
   key_name   = "bastion-kp"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAzplpjidMQGdVpoR8gR07HmELd7okl0mr+OvYPP7Xd2Yd6CgEXhdtM/TnP9jR7XGii48NbNPzOjVpIs+g05ADWoZtotTz99H9uxQJDgz9IYYbIbyR0KBL698ewTXhXq9S+oPnqLj8X2+DKdVZBmO5j0mrlC9j8NwJVx8MhlxOPhcJ0mrY08Ah9X772Gt1GH9WFC9nyC9+aCP9A6P1zJDAmeb+Iw0GiSriQ3fVIKbVy7nuZEEPSSaFrmp3xLGjVTHVwwr663I+Gm6EnpjX/HyD7imkcdsUwEJrnY4tX9zarvG8K1JohSC7HbeZWgjgryEu/Z/K/Hr4A/zvRrQ6rGoIxw== rsa-key-20220112"
 }
 
 # CREATES EC2 BASTION INSTANCE
-resource "aws_instance" "bastion_host" {
+resource "aws_instance" "bastionserver" {
   ami                  = data.aws_ami.rhel.id
   instance_type        = "t3.micro"
   subnet_id            = var.external_subnet_id
@@ -69,7 +69,7 @@ resource "aws_instance" "bastion_host" {
   iam_instance_profile = var.ec2_role
   ebs_optimized        = true
   monitoring           = true
-  user_data            = base64encode(data.template_file.WebServerUD.rendered)
+  user_data            = base64encode(data.template_file.BastoinServer.rendered)
   metadata_options {
     http_endpoint               = "enabled"
     http_tokens                 = "required"
@@ -77,7 +77,7 @@ resource "aws_instance" "bastion_host" {
   }
 
   vpc_security_group_ids = [
-    aws_security_group.sg_bastion_host.id
+    aws_security_group.sg_bastionserver.id
   ]
 
   root_block_device {

@@ -1,6 +1,6 @@
 #CREATES S3 LOGGING BUCKET FOR VPC FLOW LOGS AND ALB ACCESS LOGS
 resource "aws_s3_bucket" "s3logging" {
-  bucket        = "french-logging-2022"
+  bucket        = "french-lab-logging-2022"
   acl           = "log-delivery-write"
   force_destroy = true
   policy        = <<POLICY
@@ -13,7 +13,7 @@ resource "aws_s3_bucket" "s3logging" {
         "s3:PutObject"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::french-logging-2022/*",
+      "Resource": "arn:aws:s3:::french-lab-logging-2022/*",
       "Principal": {
         "AWS": [
           "arn:aws:iam::127311923021:root"
@@ -25,7 +25,7 @@ resource "aws_s3_bucket" "s3logging" {
         "s3:PutObject"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::french-logging-2022/*",
+      "Resource": "arn:aws:s3:::french-lab-logging-2022/*",
       "Principal": {
         "Service": [
           "delivery.logs.amazonaws.com"
@@ -42,7 +42,7 @@ resource "aws_s3_bucket" "s3logging" {
         "s3:GetBucketAcl"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::french-logging-2022",
+      "Resource": "arn:aws:s3:::french-lab-logging-2022",
       "Principal": {
         "Service": [
           "delivery.logs.amazonaws.com"
@@ -64,8 +64,8 @@ POLICY
 }
 
 #CREATES S3 IMAGE BUCKET
-resource "aws_s3_bucket" "s3images" {
-  bucket        = "french-images-2022"
+resource "aws_s3_bucket" "french-lab-images-2022" {
+  bucket        = "french-lab-images-2022"
   acl           = "private"
   force_destroy = true
   tags          = merge(var.default_s3_tags)
